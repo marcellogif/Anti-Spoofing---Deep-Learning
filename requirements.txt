@@ -1,0 +1,16 @@
+# Face Anti-Spoofing — Streamlit demo (COMP6826001)
+# Python 3.9+ recommended.  Install with:  pip install -r requirements.txt
+
+streamlit>=1.32
+torch>=2.1
+torchvision>=0.16
+opencv-python>=4.8
+numpy>=1.24
+pandas>=2.0
+plotly>=5.18
+Pillow>=10.0
+
+# --- Optional (GPU inference, Windows) ------------------------------------ #
+# The default PyPI torch wheels on Windows are CPU builds.  For CUDA support
+# install the matching build from the PyTorch index, e.g.:
+#   pip install torch torchvision --index-url https://download.pytorch.org/whl/cu121

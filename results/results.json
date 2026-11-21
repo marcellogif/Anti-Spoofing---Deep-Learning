@@ -1,0 +1,140 @@
+{
+  "meta": {
+    "course": "COMP6826001",
+    "course_name": "Deep Learning",
+    "project": "Comparative Analysis of Deep Learning Models for Face Anti-Spoofing Detection in Facial Recognition Systems",
+    "updated": "2026-11-21",
+    "note": "Metrics for Scenario 1 (Custom CNN, ResNet18) are taken directly from the executed outputs of Anti_Spoofing_Skenario_1.ipynb. Entries with status 'pending' are placeholders that must be filled in after the corresponding training runs."
+  },
+  "dataset": {
+    "sources": [
+      {
+        "name": "NUAA",
+        "kaggle": "aleksandrpikul222/nuaaaa",
+        "total": 12614,
+        "real": 5105,
+        "spoof": 7509,
+        "attack_type": "Print attack (photo on paper)"
+      },
+      {
+        "name": "Face Anti-Spoofing Large Dataset",
+        "kaggle": "mdhasibulhossain231/face-anti-spoofing-large-dataset-image-video",
+        "total": 8112,
+        "real": 3832,
+        "spoof": 4280,
+        "attack_type": "Replay attack (screen/photo/video)"
+      }
+    ],
+    "merged": {
+      "total": 20726,
+      "classes": {
+        "Real": 8937,
+        "Print": 7509,
+        "Replay": 4280
+      }
+    },
+    "splits": {
+      "train": 14508,
+      "validation": 3109,
+      "test": 3109,
+      "ratios": "70 / 15 / 15"
+    },
+    "after_preprocessing": {
+      "total_processed": 20627,
+      "failed": 99,
+      "by_split": {
+        "train": {"Real": 6244, "Print": 5249, "Replay": 2939},
+        "validation": {"Real": 1339, "Print": 1124, "Replay": 638},
+        "test": {"Real": 1339, "Print": 1123, "Replay": 632}
+      }
+    }
+  },
+  "scenarios": [
+    {"id": 1, "learning_rate": 0.001, "batch_size": 32, "optimizer": "Adam", "epochs": 10, "dropout": 0.3, "momentum": null},
+    {"id": 2, "learning_rate": 0.0001, "batch_size": 16, "optimizer": "Adam", "epochs": 20, "dropout": 0.2, "momentum": null},
+    {"id": 3, "learning_rate": 0.00001, "batch_size": 16, "optimizer": "Adam", "epochs": 30, "dropout": 0.5, "momentum": null},
+    {"id": 4, "learning_rate": 0.0001, "batch_size": 32, "optimizer": "SGD", "epochs": 40, "dropout": 0.3, "momentum": 0.9}
+  ],
+  "results": [
+    {
+      "model": "Custom CNN",
+      "scenario": 1,
+      "status": "completed",
+      "accuracy": 0.9664,
+      "precision": 0.9554,
+      "recall": 0.9674,
+      "f1": 0.9607,
+      "best_epoch": 9,
+      "train_loss": 0.1185,
+      "val_loss": 0.0861,
+      "train_accuracy": 0.9559,
+      "val_accuracy": 0.97,
+      "avg_epoch_time_s": 61.61,
+      "test_support": 3094,
+      "per_class": {
+        "Real": {"precision": 0.98, "recall": 0.95, "f1": 0.96, "support": 1339},
+        "Print": {"precision": 1.0, "recall": 0.99, "f1": 0.99, "support": 1123},
+        "Replay": {"precision": 0.89, "recall": 0.97, "f1": 0.92, "support": 632}
+      }
+    },
+    {
+      "model": "MobileNetV2",
+      "scenario": null,
+      "status": "pending",
+      "accuracy": null,
+      "precision": null,
+      "recall": null,
+      "f1": null,
+      "best_epoch": null,
+      "train_loss": null,
+      "val_loss": null,
+      "train_accuracy": null,
+      "val_accuracy": null,
+      "avg_epoch_time_s": null,
+      "test_support": null,
+      "per_class": null
+    },
+    {
+      "model": "ResNet18",
+      "scenario": 1,
+      "status": "completed",
+      "accuracy": 0.947,
+      "precision": 0.9439,
+      "recall": 0.9293,
+      "f1": 0.9358,
+      "best_epoch": 10,
+      "train_loss": 0.2582,
+      "val_loss": 0.1332,
+      "train_accuracy": 0.8982,
+      "val_accuracy": 0.9487,
+      "avg_epoch_time_s": 56.22,
+      "test_support": 3094,
+      "per_class": {
+        "Real": {"precision": 0.92, "recall": 0.96, "f1": 0.94, "support": 1339},
+        "Print": {"precision": 0.99, "recall": 0.99, "f1": 0.99, "support": 1123},
+        "Replay": {"precision": 0.92, "recall": 0.83, "f1": 0.87, "support": 632}
+      }
+    },
+    {
+      "model": "EfficientNetB0",
+      "scenario": null,
+      "status": "pending",
+      "accuracy": null,
+      "precision": null,
+      "recall": null,
+      "f1": null,
+      "best_epoch": null,
+      "train_loss": null,
+      "val_loss": null,
+      "train_accuracy": null,
+      "val_accuracy": null,
+      "avg_epoch_time_s": null,
+      "test_support": null,
+      "per_class": null
+    }
+  ],
+  "efficiency": {
+    "note": "Pure network latency, FPS and model size are measured live in the app (Results page) on the current machine. End-to-end webcam latency (capture + Haar Cascade + preprocessing + inference + rendering) is measured in the Live Demo page.",
+    "iso_standard": "ISO/IEC 30107-3:2023 - APCER/BPCER reporting is planned for the user-testing phase."
+  }
+}

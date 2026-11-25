@@ -316,7 +316,7 @@ def page_overview(results: dict) -> None:
     st.markdown("### Headline results (Scenario 1)")
     st.caption(
         "Values read directly from the executed training notebook "
-        "`Anti_Spoofing_Skenario_1.ipynb`."
+        "`notebooks/Anti_Spoofing_Skenario_1.ipynb`."
     )
     if best:
         st.success(
@@ -673,7 +673,7 @@ def page_results(results: dict, checkpoints: dict[str, Path]) -> None:
 
     st.caption(
         "Confusion matrices for both models are available in the executed "
-        "cells of `Anti_Spoofing_Skenario_1.ipynb`."
+        "cells of `notebooks/Anti_Spoofing_Skenario_1.ipynb`."
     )
 
     st.divider()
@@ -860,7 +860,7 @@ def page_live_demo(results: dict, checkpoints: dict[str, Path]) -> None:
         st.warning(
             """
             **No trained checkpoints found.** Train the models in
-            `Anti_Spoofing_Skenario_1.ipynb` (Colab), download the
+            `notebooks/Anti_Spoofing_Skenario_1.ipynb` (Colab), download the
             `*_best.pth` files and drop them into the `checkpoints/`
             folder of this repository:
 

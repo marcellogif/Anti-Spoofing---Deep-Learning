@@ -18,15 +18,14 @@ demo used to train, compare and deploy four Deep Learning architectures for
 ## Table of Contents
 
 1. [Problem](#1-problem)
-2. [Objectives](#2-objectives)
-3. [Dataset Source and Description](#3-dataset-source-and-description)
-4. [Selected Deep Learning Methods and Baseline](#4-selected-deep-learning-methods-and-baseline)
-5. [Planned Evaluation Metrics](#5-planned-evaluation-metrics)
-6. [Results So Far](#6-results-so-far)
-7. [Repository Structure](#7-repository-structure)
-8. [Getting Started](#8-getting-started)
-9. [Deployment & User Testing Plan](#9-deployment--user-testing-plan)
-10. [References](#10-references)
+2. [Dataset Source and Description](#2-dataset-source-and-description)
+3. [Selected Deep Learning Methods and Baseline](#3-selected-deep-learning-methods-and-baseline)
+4. [Planned Evaluation Metrics](#4-planned-evaluation-metrics)
+5. [Results So Far](#5-results-so-far)
+6. [Repository Structure](#6-repository-structure)
+7. [Getting Started](#7-getting-started)
+8. [Deployment & User Testing Plan](#8-deployment--user-testing-plan)
+9. [References](#9-references)
 
 ---
 
@@ -194,7 +193,7 @@ follows exactly this scheme).
 Every scenario is evaluated with the same dataset split and metrics so that
 the effect of the hyper-parameters on the 3-class classification performance
 can be compared objectively. **Scenario 1 has been executed** (Custom CNN and
-ResNet18 — see [Results](#6-results-so-far)); the remaining runs are pending.
+ResNet18 — see [Results](#5-results-so-far)); the remaining runs are pending.
 
 ---
 
@@ -213,8 +212,8 @@ ResNet18 — see [Results](#6-results-so-far)); the remaining runs are pending.
 
 Scenario 1 (Custom CNN vs. ResNet18, LR 0.001, batch 32, Adam, 10 epochs,
 dropout 0.3) — values taken directly from the executed cells of
-[`Anti_Spoofing_Skenario_1.ipynb`](Anti_Spoofing_Skenario_1.ipynb) on the
-3,094-image test set:
+[`notebooks/Anti_Spoofing_Skenario_1.ipynb`](notebooks/Anti_Spoofing_Skenario_1.ipynb)
+on the 3,094-image test set:
 
 | Model | Accuracy | Precision (macro) | Recall (macro) | F1-Score (macro) | Best epoch | Val accuracy | Avg epoch time |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
@@ -244,21 +243,31 @@ which the Streamlit app renders.
 
 ```
 DeepLearning/
-├── Anti_Spoofing_Skenario_1.ipynb   # Training notebook (Colab) — Skenario 1
 ├── app.py                           # Streamlit application (entry point)
 ├── requirements.txt                 # Python dependencies
 ├── README.md                        # This file
 │
-├── src/
+├── notebooks/
+│   └── Anti_Spoofing_Skenario_1.ipynb   # Training notebook (Colab) — Skenario 1
+│
+├── src/                             # Core package, shared by app & scripts
+│   ├── __init__.py
 │   ├── models.py                    # CustomCNN, ResNet18, MobileNetV2, EfficientNetB0
 │   ├── preprocessing.py             # Haar Cascade, crop, resize, normalisation, overlay
 │   └── inference.py                 # Checkpoint loading, prediction, benchmark
 │
-├── results/
-│   └── results.json                 # Dataset stats, scenarios and evaluation metrics
+├── realtime/                        # Standalone OpenCV scripts (no Streamlit)
+│   ├── anti_spoof_efficientnet.py   # EfficientNetB0 loader + predict_face()
+│   ├── anti_spoof_resnet.py         # ResNet18 loader (standalone)
+│   ├── realtime_efficientnet.py     # Live webcam anti-spoofing demo
+│   └── test_efficientnet.py         # Image-file test (Tk file picker)
 │
-└── checkpoints/                     # Trained *.pth weights (not committed)
-    └── README.md                    # Expected file names & how to obtain them
+├── checkpoints/                     # Trained *.pth weights (not committed)
+│   ├── README.md                    # Expected file names & how to obtain them
+│   └── EfficientNetB0_S1_v2_best.pth
+│
+└── results/
+    └── results.json                 # Dataset stats, scenarios and evaluation metrics
 ```
 
 ---
@@ -273,8 +282,9 @@ DeepLearning/
 
 ### 7.2 Training (Google Colab)
 
-1. Open [`Anti_Spoofing_Skenario_1.ipynb`](Anti_Spoofing_Skenario_1.ipynb) in
-   Google Colab.
+1. Open
+   [`notebooks/Anti_Spoofing_Skenario_1.ipynb`](notebooks/Anti_Spoofing_Skenario_1.ipynb)
+   in Google Colab.
 2. Run the **Download File** cells — they pull both Kaggle datasets:
 
    ```bash
@@ -373,7 +383,35 @@ contains `customcnn`, `mobilenet`, `resnet18` or `efficientnet`). Without a
 checkpoint the *Live Demo* page explains what to do and can still be exercised
 in a clearly-marked *random weights* mode.
 
-### 7.5 App pages
+### 7.5 Running the realtime scripts (no Streamlit)
+
+The `realtime/` folder contains standalone OpenCV scripts. They load their
+checkpoint from `../checkpoints/`, so the weights must be in place first
+(see [§7.4](#74-adding-trained-weights)). Run them **from the project root**:
+
+```powershell
+# Live webcam demo (EfficientNetB0)
+python realtime\realtime_efficientnet.py
+
+# Single image test with a file picker (EfficientNetB0)
+python realtime\test_efficientnet.py
+
+# ResNet18 variant (loads its own weights at import time)
+python realtime\anti_spoof_resnet.py
+```
+
+| Script | Purpose |
+| --- | --- |
+| `realtime_efficientnet.py` | Real-time webcam inference with smoothed predictions |
+| `test_efficientnet.py` | Pick an image from disk and run one prediction |
+| `anti_spoof_efficientnet.py` | Shared EfficientNetB0 loader (`predict_face`, `CLASS_NAMES`) — imported by the two scripts above |
+| `anti_spoof_resnet.py` | Standalone ResNet18 loader/eval script |
+
+> All scripts assume the working directory is the project root and use
+> `__file__`-relative paths, so they also work when launched from anywhere
+> (`python D:\...\realtime\realtime_efficientnet.py`).
+
+### 7.6 App pages
 
 | Page | Contents |
 | --- | --- |
